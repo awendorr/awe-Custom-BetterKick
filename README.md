@@ -37,7 +37,7 @@ Since the Google Chrome Web Store requires a developer fee, you can install this
 ### 🦊 Mozilla Firefox:
 
 For Firefox users, this extension is available directly from the official add-on store.
-*(You can add your Firefox add-on store link here.)*
+*(The download link will be added here once it is approved by Mozilla)*
 
 ---
 
