@@ -1,52 +1,52 @@
 <div align="center">
   <img src="https://kick.com/favicon.ico" alt="Kick Logo" width="100"/>
   <h1>awe Custom&BetterKick (Chrome & Firefox)</h1>
-  <p>Kick.com yayınları için gelişmiş video filtreleri, gece görüşü, otomatik kalite ve oynatma hızı ayarları.</p>
+  <p>Advanced video filters, night vision, automatic quality, and playback speed controls for Kick.com streams.</p>
 </div>
 
 ---
 
-## ✨ Özellikler
+## ✨ Features
 
-- 🌙 **Siyah Tonajı (Gece Görüşü):** Karanlık oyunlarda veya kameralarda sadece siyah tonları aydınlatarak detayları ortaya çıkarır.
-- 🎨 **Renk Filtreleri:** Parlaklık, Kontrast, Doygunluk, Sepia, Hue, Grayscale, Invert ve Blur filtrelerini videoya anında uygular.
-- 💾 **Profil (Preset) Sistemi:** Kendi mükemmel ayarlarınızı oluşturun, kaydedin ve istediğiniz zaman tek tıkla yükleyin.
-- 🚀 **Oynatma Hızı ve Adaptif Hız:** Yayın geride kaldığında (gecikme olduğunda) otomatik olarak hızlanıp yayına yetişir.
-- 🎥 **Gelişmiş Zoom (Yakınlaştırma):** Fare tekerleği ile videoya yakınlaşıp, farenizle ekranda gezinebilirsiniz (Pan & Zoom).
-- 💚 **Dinamik Tema:** Seçtiğiniz renge göre Kick.com arayüzü ve tarayıcı sekmenizdeki Kick logosu (Favicon) otomatik renk değiştirir.
-
----
-
-## 🛠️ Nasıl Kurulur? (Ücretsiz ve Kolay)
-
-Google Chrome Web Mağazası ücretli olduğu için bu eklentiyi tamamen **ücretsiz ve açık kaynaklı** olarak buradan kurabilirsiniz.
-
-### 🚀 Google Chrome, Brave, Edge, Opera İçin Kurulum:
-
-1. Bu sayfanın sağ üstündeki yeşil **`<> Code`** butonuna tıklayın ve **`Download ZIP`** seçeneğini seçip dosyayı indirin.
-2. İndirdiğiniz `.zip` dosyasını masaüstünde bir klasöre çıkartın. (Örn: `awe_Custom_BetterKick` klasörü).
-3. Tarayıcınızda eklentiler sayfasına gidin:
-   - **Chrome/Brave:** Adres çubuğuna `chrome://extensions/` yazın ve Enter'a basın.
-   - **Edge:** Adres çubuğuna `edge://extensions/` yazın ve Enter'a basın.
-4. Açılan sayfanın sağ üst köşesindeki **"Geliştirici Modu" (Developer Mode)** anahtarını açın.
-5. Sol üstte beliren **"Paketlenmemiş öğe yükle" (Load unpacked)** butonuna tıklayın.
-6. Masaüstüne çıkarttığınız klasörü seçin.
-
-**🎉 Tebrikler! Eklenti kuruldu.** Artık Kick.com'a girip yayınların keyfini çıkarabilirsiniz!
-
-### 🦊 Mozilla Firefox İçin Kurulum:
-
-Firefox kullanıcıları için eklenti resmi mağazada mevcuttur.
-*(Buraya Firefox eklenti mağazası linkinizi ekleyebilirsiniz.)*
+- 🌙 **Black Level (Night Vision):** Brightens only the dark and black tones in games or cameras, revealing hidden details without blowing out the highlights.
+- 🎨 **Color Filters:** Instantly apply Brightness, Contrast, Saturation, Sepia, Hue, Grayscale, Invert, and Blur filters directly to the video player.
+- 💾 **Preset System:** Create, save, and load your perfect viewing profiles with a single click.
+- 🚀 **Playback Speed & Adaptive Speed:** Speed up the stream manually or enable adaptive speed to automatically catch up if your stream falls behind live.
+- 🎥 **Advanced Zoom (Pan & Zoom):** Zoom into the video stream using your mouse scroll wheel and pan around the screen with a click and drag.
+- 💚 **Dynamic Theme:** Automatically changes the Kick.com UI accent color and the browser tab icon (Favicon) to match your selected custom theme color.
 
 ---
 
-## 💡 Nasıl Kullanılır?
-- Kick.com'da herhangi bir yayını açtığınızda sağ alt köşede (bildirim zilinin yanında) yeni bir "Ayarlar" butonu göreceksiniz.
-- O butona tıklayarak **awe Custom&BetterKick** kontrol paneline ulaşabilir, tüm ayarları ve filtreleri anında değiştirebilirsiniz.
-- Fareniz videonun üzerindeyken farenin tekerleğini kaydırarak yayına yakınlaşıp uzaklaşabilirsiniz.
+## 🛠️ Installation
+
+Since the Google Chrome Web Store requires a developer fee, you can install this extension completely **free and open-source** directly from here.
+
+### 🚀 Google Chrome, Brave, Edge, Opera:
+
+1. Click the green **`<> Code`** button at the top right of this page and select **`Download ZIP`**.
+2. Extract the downloaded `.zip` file to a folder on your desktop (e.g., `awe_Custom_BetterKick`).
+3. Open the extensions page in your browser:
+   - **Chrome/Brave:** Type `chrome://extensions/` in the address bar and press Enter.
+   - **Edge:** Type `edge://extensions/` in the address bar and press Enter.
+4. Enable **"Developer Mode"** in the top right corner.
+5. Click the **"Load unpacked"** button that appears on the top left.
+6. Select the folder you extracted.
+
+**🎉 Congratulations!** You can now go to Kick.com and enjoy enhanced streams!
+
+### 🦊 Mozilla Firefox:
+
+For Firefox users, this extension is available directly from the official add-on store.
+*(You can add your Firefox add-on store link here.)*
 
 ---
 
-### 📝 Lisans
-Bu proje **MIT Lisansı** ile lisanslanmıştır. İstediğiniz gibi kullanabilir, değiştirebilir ve paylaşabilirsiniz.
+## 💡 Usage
+- Open any stream on Kick.com and you will see a new "Settings" toggle button in the bottom right corner of the player (next to the notification bell).
+- Click that button to open the **awe Custom&BetterKick** control panel and instantly adjust all settings and filters.
+- While hovering over the video, hold `CTRL` (or use the scroll zoom toggle) and scroll your mouse wheel to zoom in and out of the broadcast.
+
+---
+
+### 📝 License
+This project is licensed under the **MIT License**. You are free to use, modify, and distribute it as you please.

@@ -3,12 +3,19 @@
 let videoElement = null;
 let enhancerPanel = null;
 
+const msg = (key) => {
+    if (typeof chrome !== 'undefined' && chrome.i18n) {
+        return chrome.i18n.getMessage(key) || key;
+    }
+    return key;
+};
+
 const builtinPresets = {
-    "Varsayılan": { brightness: 100, contrast: 100, saturate: 100, sepia: 0, hue: 0, grayscale: 0, invert: 0, blur: 0, blackLevel: 0 },
-    "Gece Görüşü": { brightness: 120, contrast: 85, saturate: 110, sepia: 0, hue: 0, grayscale: 0, invert: 0, blur: 0, blackLevel: 15 },
-    "Sinematik": { brightness: 90, contrast: 120, saturate: 130, sepia: 15, hue: 0, grayscale: 0, invert: 0, blur: 0, blackLevel: 0 },
-    "Canlı Renkler": { brightness: 100, contrast: 110, saturate: 150, sepia: 0, hue: 0, grayscale: 0, invert: 0, blur: 0, blackLevel: 0 },
-    "Özel": {}
+    [msg("preset_default") || "Varsayılan"]: { brightness: 100, contrast: 100, saturate: 100, sepia: 0, hue: 0, grayscale: 0, invert: 0, blur: 0, blackLevel: 0 },
+    [msg("preset_nightVision") || "Gece Görüşü"]: { brightness: 120, contrast: 85, saturate: 110, sepia: 0, hue: 0, grayscale: 0, invert: 0, blur: 0, blackLevel: 15 },
+    [msg("preset_cinematic") || "Sinematik"]: { brightness: 90, contrast: 120, saturate: 130, sepia: 15, hue: 0, grayscale: 0, invert: 0, blur: 0, blackLevel: 0 },
+    [msg("preset_vibrant") || "Canlı Renkler"]: { brightness: 100, contrast: 110, saturate: 150, sepia: 0, hue: 0, grayscale: 0, invert: 0, blur: 0, blackLevel: 0 },
+    [msg("preset_custom") || "Özel"]: {}
 };
 
 let state = {
@@ -29,7 +36,7 @@ let state = {
     adaptiveSpeed: true,
     hoverSize: 2,
     themeColor: '#53fc18',
-    activePreset: "Varsayılan",
+    activePreset: msg("preset_default") || "Varsayılan",
     customPresets: {}
 };
 
@@ -466,22 +473,22 @@ function createUI() {
 
     enhancerPanel.innerHTML = `
         <div class="enhancer-section" style="flex-direction:row; align-items:center;">
-            <label style="flex:1;">Tema Rengi (Tüm Site)</label>
+            <label style="flex:1;">${msg("ui_themeColor")}</label>
             <input type="color" id="enhancer-theme-color" value="#53fc18" style="background:transparent; border:none; cursor:pointer; width:30px; height:30px; padding:0;">
         </div>
         
         <div class="enhancer-section">
-            <label>Video Filtre Profili</label>
+            <label>${msg("ui_videoFilterProfile")}</label>
             <div style="display:flex; gap:5px; margin-top:4px;">
                 <select id="enhancer-preset" style="flex:1;"></select>
-                <button id="btn-save-preset" style="background:#333; color:white; border:1px solid #555; border-radius:4px; padding:0 8px; cursor:pointer;">Kaydet</button>
+                <button id="btn-save-preset" style="background:#333; color:white; border:1px solid #555; border-radius:4px; padding:0 8px; cursor:pointer;">${msg("ui_btnSave")}</button>
             </div>
         </div>
 
         <div class="enhancer-section">
-            <label>Oynatma Hızı</label>
+            <label>${msg("ui_playbackSpeed")}</label>
             <label class="checkbox-row">
-                <input type="checkbox" id="enhancer-adaptive-speed"> Adaptif Hız (Geri kalınca hızlanır)
+                <input type="checkbox" id="enhancer-adaptive-speed"> ${msg("ui_adaptiveSpeed")}
             </label>
             <select id="enhancer-speed" style="margin-top:4px;">
                 <option value="0.25">0.25x</option>
@@ -496,62 +503,62 @@ function createUI() {
         
 
         <div class="enhancer-section">
-            <label>Parlaklık <span id="val-brightness">100%</span></label>
+            <label>${msg("ui_brightness")} <span id="val-brightness">100%</span></label>
             <input type="range" id="enhancer-brightness" min="10" max="200" value="100">
         </div>
 
         <div class="enhancer-section">
-            <label>Kontrast <span id="val-contrast">100%</span></label>
+            <label>${msg("ui_contrast")} <span id="val-contrast">100%</span></label>
             <input type="range" id="enhancer-contrast" min="10" max="200" value="100">
         </div>
         
         <div class="enhancer-section">
-            <label>Doygunluk <span id="val-saturate">100%</span></label>
+            <label>${msg("ui_saturate")} <span id="val-saturate">100%</span></label>
             <input type="range" id="enhancer-saturate" min="0" max="200" value="100">
         </div>
         
         <div class="enhancer-section">
-            <label>Siyah Tonajı (Gece Görüşü) <span id="val-blackLevel">0%</span></label>
+            <label>${msg("ui_blackLevel")} <span id="val-blackLevel">0%</span></label>
             <input type="range" id="enhancer-blackLevel" min="0" max="50" value="0">
         </div>
         
         <div class="enhancer-section">
-            <label>Grayscale (Siyah Beyaz) <span id="val-grayscale">0%</span></label>
+            <label>${msg("ui_grayscale")} <span id="val-grayscale">0%</span></label>
             <input type="range" id="enhancer-grayscale" min="0" max="100" value="0">
         </div>
         
         <div class="enhancer-section">
-            <label>Invert (Ters Renk) <span id="val-invert">0%</span></label>
+            <label>${msg("ui_invert")} <span id="val-invert">0%</span></label>
             <input type="range" id="enhancer-invert" min="0" max="100" value="0">
         </div>
         
         <div class="enhancer-section">
-            <label>Blur (Bulanıklık) <span id="val-blur">0px</span></label>
+            <label>${msg("ui_blur")} <span id="val-blur">0px</span></label>
             <input type="range" id="enhancer-blur" min="0" max="10" step="0.5" value="0">
         </div>
         
         <div class="enhancer-section">
-            <label>Sepia <span id="val-sepia">0%</span></label>
+            <label>${msg("ui_sepia")} <span id="val-sepia">0%</span></label>
             <input type="range" id="enhancer-sepia" min="0" max="100" value="0">
         </div>
         
         <div class="enhancer-section">
-            <label>Renk Tonu <span id="val-hue">0°</span></label>
+            <label>${msg("ui_hue")} <span id="val-hue">0°</span></label>
             <input type="range" id="enhancer-hue" min="-180" max="180" value="0">
         </div>
         
         <div class="enhancer-section">
-            <label>Önizleme Boyutu <span id="val-hoverSize">2.0x</span></label>
+            <label>${msg("ui_hoverSize")} <span id="val-hoverSize">2.0x</span></label>
             <input type="range" id="enhancer-hoverSize" min="0.5" max="2.5" step="0.1" value="2">
         </div>
         
         <div class="enhancer-section">
-            <label>Yakınlaştırma (Zoom) <span id="val-zoom">1.0x</span></label>
+            <label>${msg("ui_zoom")} <span id="val-zoom">1.0x</span></label>
             <label class="checkbox-row" style="margin-bottom:4px;">
-                <input type="checkbox" id="enhancer-scroll-zoom"> Fare Tekerleği ile Zoom (Scroll)
+                <input type="checkbox" id="enhancer-scroll-zoom"> ${msg("ui_scrollZoom")}
             </label>
             <input type="range" id="enhancer-zoom" min="1" max="3" step="0.1" value="1">
-            <button class="reset-btn" id="btn-reset-all">Tüm Ayarları Sıfırla</button>
+            <button class="reset-btn" id="btn-reset-all">${msg("ui_resetAll")}</button>
         </div>
     `;
 
@@ -568,14 +575,14 @@ function createUI() {
             opt.textContent = name;
             presetSelect.appendChild(opt);
         }
-        presetSelect.value = state.activePreset || "Varsayılan";
+        presetSelect.value = state.activePreset || msg("preset_default");
     }
     populatePresets();
 
     document.getElementById('enhancer-preset').addEventListener('change', (e) => {
         const name = e.target.value;
         const allPresets = { ...builtinPresets, ...state.customPresets };
-        if (allPresets[name] && name !== "Özel") {
+        if (allPresets[name] && name !== msg("preset_custom")) {
             state.activePreset = name;
             for (let key in allPresets[name]) {
                 state[key] = allPresets[name][key];
@@ -593,10 +600,10 @@ function createUI() {
     });
 
     document.getElementById('btn-save-preset').addEventListener('click', () => {
-        const name = prompt("Yeni ayar profili için bir isim girin:");
+        const name = prompt(msg("prompt_presetName"));
         if (name && name.trim() !== '') {
             if (builtinPresets[name]) {
-                alert("Varsayılan profil isimlerini kullanamazsınız!");
+                alert(msg("alert_defaultPreset"));
                 return;
             }
             if (!state.customPresets) state.customPresets = {};
