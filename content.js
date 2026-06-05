@@ -37,7 +37,13 @@ let state = {
     hoverSize: 2,
     themeColor: '#53fc18',
     activePreset: msg("preset_default") || "Varsayılan",
-    customPresets: {}
+    customPresets: {},
+    themeOnlyMode: false,
+    chatHighlightEnabled: false,
+    chatModColor: '#00d26a',
+    chatVipColor: '#e9113c',
+    chatOgColor: '#f9d510',
+    chatBroadcasterColor: '#ff6a4a'
 };
 
 function saveState() {
@@ -412,6 +418,12 @@ function applyThemeColor() {
         #kick-enhancer-panel .checkbox-row input[type="checkbox"] {
             accent-color: ${state.themeColor} !important;
         }
+        
+        /* Gizli İzleyici Sayacı Rengi */
+        #kick-enhancer-viewer-count {
+            color: ${state.themeColor} !important;
+            border-color: ${state.themeColor}4d !important;
+        }
     `;
 }
 
@@ -477,6 +489,16 @@ function createUI() {
             <input type="color" id="enhancer-theme-color" value="#53fc18" style="background:transparent; border:none; cursor:pointer; width:30px; height:30px; padding:0;">
         </div>
         
+        <div class="enhancer-section" style="border-bottom: 1px solid #333; padding-bottom: 12px; margin-bottom: 4px;">
+            <label class="checkbox-row" style="font-weight: bold; color: #ff4d4d;">
+                <input type="checkbox" id="enhancer-theme-only"> ${msg("ui_themeOnlyMode") || "Yalnızca Temayı Kullan"}
+            </label>
+            <div style="font-size: 10px; color: #888; margin-top: 4px; padding-left: 20px;">
+                ${msg("ui_themeOnlyDesc") || "Tüm özellikleri devre dışı bırakır, sadece Kick'in renklerini değiştirir. (Aç/kapatınca sayfa yenilenir)"}
+            </div>
+        </div>
+
+        <div id="enhancer-main-settings" style="${state.themeOnlyMode ? 'opacity: 0.3; pointer-events: none;' : ''}">
         <div class="enhancer-section">
             <label>${msg("ui_videoFilterProfile")}</label>
             <div style="display:flex; gap:5px; margin-top:4px;">
@@ -559,6 +581,29 @@ function createUI() {
             </label>
             <input type="range" id="enhancer-zoom" min="1" max="3" step="0.1" value="1">
             <button class="reset-btn" id="btn-reset-all">${msg("ui_resetAll")}</button>
+        </div>
+
+        <div class="enhancer-section" style="border-top: 1px solid #333; padding-top: 12px; margin-top: 4px;">
+            <label class="checkbox-row" style="font-weight: bold; margin-bottom: 8px;">
+                <input type="checkbox" id="enhancer-chat-highlight"> ${msg("ui_chatHighlight")}
+            </label>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 4px;">
+                <label style="font-size: 11px;">${msg("ui_chatBroadcasterColor") || "Yayıncı / Host"}</label>
+                <input type="color" id="enhancer-chat-broadcaster-color" value="#ff6a4a" style="background:transparent; border:none; cursor:pointer; width:24px; height:24px; padding:0;">
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 4px;">
+                <label style="font-size: 11px;">${msg("ui_chatModColor") || "Moderatör"}</label>
+                <input type="color" id="enhancer-chat-mod-color" value="#00d26a" style="background:transparent; border:none; cursor:pointer; width:24px; height:24px; padding:0;">
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 4px;">
+                <label style="font-size: 11px;">${msg("ui_chatVipColor") || "VIP"}</label>
+                <input type="color" id="enhancer-chat-vip-color" value="#e9113c" style="background:transparent; border:none; cursor:pointer; width:24px; height:24px; padding:0;">
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <label style="font-size: 11px;">${msg("ui_chatOgColor") || "Kurucu / OG"}</label>
+                <input type="color" id="enhancer-chat-og-color" value="#f9d510" style="background:transparent; border:none; cursor:pointer; width:24px; height:24px; padding:0;">
+            </div>
+        </div>
         </div>
     `;
 
@@ -656,12 +701,56 @@ function createUI() {
         applyThemeColor();
         saveState();
     });
+    
+    const themeOnlyCb = document.getElementById('enhancer-theme-only');
+    if (themeOnlyCb) {
+        themeOnlyCb.checked = state.themeOnlyMode === true;
+        themeOnlyCb.addEventListener('change', (e) => {
+            state.themeOnlyMode = e.target.checked;
+            saveState();
+            setTimeout(() => {
+                window.location.reload();
+            }, 100);
+        });
+    }
 
     const scrollZoomCb = document.getElementById('enhancer-scroll-zoom');
     scrollZoomCb.checked = state.scrollZoomEnabled !== false;
     scrollZoomCb.addEventListener('change', (e) => {
         state.scrollZoomEnabled = e.target.checked;
         saveState();
+    });
+
+    const chatHighlightCb = document.getElementById('enhancer-chat-highlight');
+    if (chatHighlightCb) {
+        chatHighlightCb.checked = state.chatHighlightEnabled;
+        chatHighlightCb.addEventListener('change', (e) => {
+            state.chatHighlightEnabled = e.target.checked;
+            saveState();
+            applyChatHighlights();
+        });
+    }
+
+    ['broadcaster', 'mod', 'vip', 'og'].forEach(role => {
+        const input = document.getElementById(`enhancer-chat-${role}-color`);
+        if (input) {
+            const stateKey = `chat${role.charAt(0).toUpperCase() + role.slice(1)}Color`;
+            input.value = state[stateKey] || '#ffffff';
+            input.addEventListener('input', (e) => {
+                state[stateKey] = e.target.value;
+                saveState();
+                
+                document.querySelectorAll('.enhancer-chat-highlight').forEach(el => {
+                    el.classList.remove('enhancer-chat-highlight');
+                    el.style.border = '';
+                    el.style.backgroundColor = '';
+                    el.style.borderRadius = '';
+                    el.style.padding = '';
+                    el.style.margin = '';
+                });
+                applyChatHighlights();
+            });
+        }
     });
 
     const bindSlider = (id, stateKey, suffix = '%') => {
@@ -899,8 +988,251 @@ function setupHoverPreview() {
     });
 }
 
+// Hidden Viewer Count Logic
+let viewerCountInterval = null;
+
+async function updateHiddenViewerCount() {
+    const pathParts = location.pathname.split('/').filter(Boolean);
+    if (pathParts.length !== 1) return; // Sadece kanal sayfalarında
+    
+    const channelName = pathParts[0];
+    const excludedPaths = ['categories', 'dashboard', 'settings', 'following', 'search'];
+    if (excludedPaths.includes(channelName)) return;
+
+    try {
+        const response = await fetch(`https://kick.com/api/v1/channels/${channelName}`);
+        if (!response.ok) return;
+        const data = await response.json();
+        
+        let viewers = 0;
+        if (data.livestream) {
+            viewers = data.livestream.viewer_count !== undefined ? data.livestream.viewer_count : data.livestream.viewers;
+        }
+        
+        if (viewers !== undefined && viewers > 0) {
+            const nativeCounter = document.querySelector('[data-testid="viewer-count"]');
+            let isNativeHidden = false;
+            
+            // Native sayaç var ama Kick tarafından gizlenmiş veya içi boşaltılmış olabilir
+            if (nativeCounter) {
+                const style = window.getComputedStyle(nativeCounter);
+                const text = nativeCounter.innerText ? nativeCounter.innerText.trim() : '';
+                if (style.display === 'none' || style.visibility === 'hidden' || text === '' || text === '0') {
+                    isNativeHidden = true;
+                }
+            } else {
+                isNativeHidden = true; // Komple DOM'da yok
+            }
+            
+            // Eğer native sayaç varsa ve görünür durumdaysa bizimkine gerek yok
+            if (nativeCounter && !isNativeHidden) {
+                const existing = document.getElementById('kick-enhancer-viewer-count');
+                if (existing) existing.remove();
+                return;
+            }
+            
+            let viewerDiv = document.getElementById('kick-enhancer-viewer-count');
+            if (!viewerDiv) {
+                viewerDiv = document.createElement('div');
+                viewerDiv.id = 'kick-enhancer-viewer-count';
+                viewerDiv.className = 'min-h-[1.375rem] flex items-center gap-1.5 text-sm font-bold';
+                
+                let targetContainer = null;
+                
+                // 1. Orijinal sayacın ebeveynine ekle (en doğru yer)
+                if (nativeCounter && nativeCounter.parentElement) {
+                    targetContainer = nativeCounter.parentElement;
+                } else {
+                    // 2. Class isminden bulmaya çalış
+                    targetContainer = document.querySelector('div[class*="flex items-center gap-2 self-end py-0.5"]') || document.querySelector('.flex.items-center.gap-2.self-end');
+                }
+                
+                if (targetContainer) {
+                    targetContainer.style.display = 'flex'; // Ebeveyn de gizlenmişse açalım
+                    // Kick orijinalde izleyici sayısını Share ve Report ikonlarının SOLUNDA gösterir.
+                    if (nativeCounter) {
+                        targetContainer.insertBefore(viewerDiv, nativeCounter);
+                    } else {
+                        targetContainer.prepend(viewerDiv);
+                    }
+                } else {
+                    // 3. Fallback (hiçbir yer bulunamazsa absolute olarak ekranda göster)
+                    viewerDiv.style.cssText = 'position: fixed; bottom: 20px; left: 20px; background: rgba(0,0,0,0.7); padding: 4px 8px; border-radius: 8px; z-index: 9999;';
+                    document.body.appendChild(viewerDiv);
+                }
+            }
+            
+            viewerDiv.style.display = 'flex';
+            
+            viewerDiv.innerHTML = `
+                <svg class="size-4" width="16" height="16" viewBox="0 0 640 512" fill="white" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M192 256c61.9 0 112-50.1 112-112S253.9 32 192 32 80 82.1 80 144s50.1 112 112 112zm76.8 32h-8.3c-20.8 10-43.9 16-68.5 16s-47.6-6-68.5-16h-8.3C51.6 288 0 339.6 0 403.2V432c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48v-28.8c0-63.6-51.6-115.2-115.2-115.2zm253.2-60c43.6 0 79-35.4 79-79s-35.4-79-79-79-79 35.4-79 79 35.4 79 79 79zm-46 32h-7.1c-19.4 8.6-40.8 13.5-63.2 14.9 13.1 18.2 21.1 40.5 21.1 64.7v28.8c0 15-3.3 29.2-9 42.1 3.5 .9 7.2 1.5 11.1 1.5h160c22.1 0 40-17.9 40-40v-24c0-48.6-39.4-88-88-88z"/>
+                </svg>
+                <span class="text-subtle relative flex items-center gap-x-1">
+                    <span class="text-primary-base" style="color: ${state.themeColor || '#53fc18'};">
+                        <span class="relative tabular-nums">${viewers.toLocaleString('tr-TR')}</span>
+                    </span>
+                    <span style="color: #d1d5db; font-weight: 600;">${msg("ui_viewerCount") || "kişi izliyor"}</span>
+                </span>
+            `;
+        } else {
+            const viewerDiv = document.getElementById('kick-enhancer-viewer-count');
+            if (viewerDiv) viewerDiv.style.display = 'none';
+        }
+    } catch (e) {
+        console.error("[Kick Enhancer] İzleyici sayısı alınamadı:", e);
+    }
+}
+
+function startViewerCountTracker() {
+    updateHiddenViewerCount();
+    clearInterval(viewerCountInterval);
+    viewerCountInterval = setInterval(updateHiddenViewerCount, 30000); // 30 saniyede bir güncelle
+}
+
+let chatObserver = null;
+
+let chatHighlightTimeout = null;
+
+function applyChatHighlights() {
+    if (!state.chatHighlightEnabled) {
+        document.querySelectorAll('.enhancer-chat-highlight').forEach(el => {
+            el.classList.remove('enhancer-chat-highlight');
+            el.style.border = '';
+            el.style.borderRadius = '';
+            el.style.backgroundColor = '';
+            el.style.boxSizing = '';
+            delete el.dataset.enhancerColor;
+        });
+        return;
+    }
+
+    const chatContainer = document.querySelector('#channel-chatroom') || document.body;
+    const badges = chatContainer.querySelectorAll('img, svg');
+    const activeContainers = new Set();
+    
+    badges.forEach(badge => {
+        if (badge.closest('button, a, .chat-input, header, [id*="header"]')) return;
+        
+        let msgContainer = badge.closest('.chat-entry, .chat-message, [data-chat-entry]');
+        
+        if (!msgContainer) {
+            let parent = badge.parentElement;
+            while (parent && parent.tagName !== 'BODY') {
+                if ((parent.classList.contains('px-4') || parent.classList.contains('px-2')) && 
+                    (parent.classList.contains('py-1') || parent.classList.contains('py-2') || parent.classList.contains('py-0.5'))) {
+                    msgContainer = parent;
+                    break;
+                }
+                parent = parent.parentElement;
+            }
+        }
+        
+        if (!msgContainer && badge.parentElement && badge.parentElement.parentElement) {
+             msgContainer = badge.parentElement.parentElement.parentElement;
+             if (msgContainer && (msgContainer.tagName === 'SPAN' || msgContainer.classList.contains('inline-flex'))) {
+                 msgContainer = msgContainer.parentElement;
+             }
+        }
+        
+        if (msgContainer) {
+            if (msgContainer.id === 'channel-chatroom' || 
+                msgContainer.classList.contains('h-full') || 
+                msgContainer.querySelector('textarea') || 
+                msgContainer.tagName === 'HEADER') {
+                msgContainer = null;
+            }
+        }
+        
+        if (!msgContainer || activeContainers.has(msgContainer)) return;
+        
+        let badgeInfo = badge.outerHTML.toLowerCase();
+        let ancestor = badge.parentElement;
+        for(let i=0; i<3 && ancestor; i++) {
+            badgeInfo += " " + (ancestor.getAttribute('data-title') || '').toLowerCase();
+            badgeInfo += " " + (ancestor.getAttribute('aria-label') || '').toLowerCase();
+            let cName = typeof ancestor.className === 'string' ? ancestor.className : (ancestor.getAttribute('class') || '');
+            badgeInfo += " " + cName.toLowerCase();
+            ancestor = ancestor.parentElement;
+        }
+        
+        let highlightColor = null;
+        
+        let isBroadcaster = badgeInfo.includes('broadcaster') || badgeInfo.includes('creator') || badgeInfo.includes('host') || badgeInfo.includes('yayıncı');
+        let isMod = badgeInfo.includes('moderator') || badgeInfo.includes('moderatör') || badgeInfo.includes('m16.2197 2.99316c');
+        let isVip = badgeInfo.includes('vip') || badgeInfo.includes('badge-vip');
+        let isOg = badgeInfo.includes('og') || badgeInfo.includes('founder') || badgeInfo.includes('badge-og');
+        
+        let channelName = window.location.pathname.split('/')[1];
+        if (channelName && !isBroadcaster) {
+            let usernameEl = msgContainer.querySelector('.font-bold');
+            if (usernameEl) {
+                let username = usernameEl.textContent.trim().toLowerCase();
+                if (username === channelName.toLowerCase()) {
+                    isBroadcaster = true;
+                }
+            }
+        }
+        
+        if (isBroadcaster) {
+            highlightColor = state.chatBroadcasterColor;
+        } else if (isMod) {
+            highlightColor = state.chatModColor;
+        } else if (isVip) {
+            highlightColor = state.chatVipColor;
+        } else if (isOg) {
+            highlightColor = state.chatOgColor;
+        }
+        
+        if (highlightColor) {
+            activeContainers.add(msgContainer);
+            if (msgContainer.dataset.enhancerColor !== highlightColor) {
+                msgContainer.classList.add('enhancer-chat-highlight');
+                msgContainer.style.border = `1px solid ${highlightColor}`;
+                msgContainer.style.borderRadius = '4px';
+                msgContainer.style.backgroundColor = `${highlightColor}1A`;
+                msgContainer.style.boxSizing = 'border-box';
+                msgContainer.dataset.enhancerColor = highlightColor;
+            }
+        }
+    });
+
+    document.querySelectorAll('.enhancer-chat-highlight').forEach(container => {
+        if (!activeContainers.has(container)) {
+            container.classList.remove('enhancer-chat-highlight');
+            container.style.border = '';
+            container.style.borderRadius = '';
+            container.style.backgroundColor = '';
+            container.style.boxSizing = '';
+            delete container.dataset.enhancerColor;
+        }
+    });
+}
+
+function startChatHighlightObserver() {
+    if (chatObserver) chatObserver.disconnect();
+    applyChatHighlights();
+
+    chatObserver = new MutationObserver((mutations) => {
+        clearTimeout(chatHighlightTimeout);
+        chatHighlightTimeout = setTimeout(() => {
+            applyChatHighlights();
+        }, 150);
+    });
+    
+    chatObserver.observe(document.body, { childList: true, subtree: true });
+}
+
 async function init() {
     loadState(async () => {
+        // Theme only modu aktifse sadece tema rengini uygulayıp bitir
+        if (state.themeOnlyMode) {
+            console.log("[Kick Enhancer] Yalnızca Tema Modu Aktif.");
+            createUI();
+            applyThemeColor();
+            return;
+        }
+
         videoElement = await waitForVideo();
         console.log("[Kick Enhancer] Video found, starting advanced features...");
 
@@ -908,6 +1240,8 @@ async function init() {
         setupZoomAndPan();
         setupHoverPreview();
         startAdaptiveSpeedCheck();
+        startViewerCountTracker();
+        startChatHighlightObserver();
 
         applyStyles();
         applyThemeColor();
@@ -936,6 +1270,9 @@ async function init() {
             if (location.href !== lastHistoryUrl) {
                 lastHistoryUrl = location.href;
                 console.log("[Kick Enhancer] URL değişti, yeni yayın algılandı (Olay Güdümlü).");
+                const viewerDiv = document.getElementById('kick-enhancer-viewer-count');
+                if (viewerDiv) viewerDiv.remove();
+                startViewerCountTracker();
             }
         });
 

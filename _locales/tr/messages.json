@@ -27,5 +27,13 @@
   "prompt_presetName": { "message": "Yeni ayar profili için bir isim girin:" },
   "alert_defaultPreset": { "message": "Varsayılan profil isimlerini kullanamazsınız!" },
   "osd_catchingUp": { "message": "⚡ Yetişiliyor (1.25x)" },
-  "osd_synced": { "message": "✅ Senkronize (1x)" }
+  "osd_synced": { "message": "✅ Senkronize (1x)" },
+  "ui_chatHighlight": { "message": "Sohbet Vurguları (Mod, VIP, OG)" },
+  "ui_chatModColor": { "message": "Mod Rengi" },
+  "ui_chatVipColor": { "message": "VIP Rengi" },
+  "ui_chatOgColor": { "message": "OG Rengi" },
+  "ui_chatBroadcasterColor": { "message": "Yayıncı Rengi" },
+  "ui_themeOnlyMode": { "message": "Yalnızca Temayı Kullan" },
+  "ui_themeOnlyDesc": { "message": "Tüm özellikleri devre dışı bırakır, sadece Kick'in renklerini değiştirir. (Aç/kapatınca sayfa yenilenir)" },
+  "ui_viewerCount": { "message": "kişi izliyor" }
 }

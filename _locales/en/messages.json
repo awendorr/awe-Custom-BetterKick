@@ -27,5 +27,13 @@
   "prompt_presetName": { "message": "Enter a name for the new setting profile:" },
   "alert_defaultPreset": { "message": "You cannot use default profile names!" },
   "osd_catchingUp": { "message": "⚡ Catching up (1.25x)" },
-  "osd_synced": { "message": "✅ Synced (1x)" }
+  "osd_synced": { "message": "✅ Synced (1x)" },
+  "ui_chatHighlight": { "message": "Chat Highlights (Mod, VIP, OG)" },
+  "ui_chatModColor": { "message": "Mod Color" },
+  "ui_chatVipColor": { "message": "VIP Color" },
+  "ui_chatOgColor": { "message": "OG Color" },
+  "ui_chatBroadcasterColor": { "message": "Broadcaster Color" },
+  "ui_themeOnlyMode": { "message": "Theme Only Mode" },
+  "ui_themeOnlyDesc": { "message": "Disables all extra features, changes only Kick's theme color. (Reloads page when toggled)" },
+  "ui_viewerCount": { "message": "viewers" }
 }
