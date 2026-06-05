@@ -1,0 +1,232 @@
+/* content.css */
+/* Modern glassmorphism panel for controls */
+#kick-enhancer-panel {
+  position: absolute;
+  bottom: 60px; /* Position above controls if it's placed inside player */
+  right: 20px;
+  background: rgba(15, 15, 20, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 16px;
+  color: #fff;
+  font-family: 'Inter', 'Roboto', sans-serif;
+  z-index: 999999; 
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 280px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-origin: bottom right;
+}
+
+#kick-enhancer-panel::-webkit-scrollbar {
+  width: 6px;
+}
+#kick-enhancer-panel::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.2);
+}
+#kick-enhancer-panel::-webkit-scrollbar-thumb {
+  background: #53fc18;
+  border-radius: 3px;
+}
+
+#kick-enhancer-panel.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.9);
+}
+
+/* Enhancer Toggle Button */
+#kick-enhancer-toggle {
+  background: transparent;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 8px;
+  margin-left: 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  z-index: 100000;
+}
+
+#kick-enhancer-toggle.fallback-pos {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: #53fc18;
+  color: #000;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  box-shadow: 0 4px 16px rgba(83, 252, 24, 0.4);
+}
+
+#kick-enhancer-toggle:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+#kick-enhancer-toggle.fallback-pos:hover {
+  transform: scale(1.05);
+  background: #66ff2e;
+  box-shadow: 0 6px 20px rgba(83, 252, 24, 0.6);
+}
+
+.enhancer-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.enhancer-section label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #b0b0b0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.enhancer-section label span {
+  color: #53fc18;
+}
+
+/* Custom Sliders */
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  background: transparent;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  background: #53fc18;
+  cursor: pointer;
+  margin-top: -7px;
+  box-shadow: 0 0 10px rgba(83, 252, 24, 0.5);
+  transition: transform 0.1s;
+}
+
+input[type=range]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+}
+
+input[type=range]:focus {
+  outline: none;
+}
+
+/* Speed Select */
+select {
+  background: rgba(0, 0, 0, 0.4);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 8px;
+  border-radius: 8px;
+  outline: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+select:focus {
+  border-color: #53fc18;
+}
+
+/* Reset buttons */
+.reset-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #b0b0b0;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  align-self: flex-start;
+  margin-top: 4px;
+  transition: all 0.2s;
+}
+
+.reset-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Video wrapper for zoom/pan */
+.kick-enhancer-zoomed {
+  cursor: grab !important;
+}
+
+.kick-enhancer-zoomed:active {
+  cursor: grabbing !important;
+}
+
+/* Hover Preview Container */
+#kick-hover-preview {
+  position: fixed;
+  z-index: 9999999;
+  width: 320px;
+  height: 180px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+  border: 2px solid var(--colors-primary, #53fc18);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  background: #000;
+  display: none;
+}
+
+#kick-hover-preview.show {
+  display: block;
+  opacity: 1;
+}
+
+#kick-hover-preview iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  font-size: 12px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.checkbox-row input[type="checkbox"] {
+  accent-color: #53fc18;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}

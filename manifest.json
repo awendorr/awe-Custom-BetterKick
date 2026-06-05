@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "awe Custom&BetterKick",
+  "version": "1.0",
+  "description": "Kick.com için oynatma hızı, filtreler, yakınlaştırma ve daha fazlası.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "kickenhancer@forzen",
+      "strict_min_version": "109.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  },
+  "permissions": [
+    "storage"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["*://*.kick.com/*"],
+      "css": ["content.css"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
